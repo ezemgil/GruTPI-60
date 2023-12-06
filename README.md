@@ -1,94 +1,85 @@
-# Trabajo Práctico Integrador - Backend de Aplicaciones 2023
+# Integrative Project - Backend Applications 2023
 
-Este repositorio contiene el código fuente para el desarrollo del backend de un sistema de alquiler de bicicletas para una ciudad específica.
+This repository contains the source code for the development of the backend of a bike rental system for a specific city.
 
-## Descripción del Proyecto
+## Project Description
 
-El sistema de alquiler de bicicletas sigue ciertos supuestos y reglas, entre ellos:
+The bike rental system operates under certain assumptions and rules, including:
 
-- **Clientes:** Solo los clientes registrados pueden alquilar bicicletas.
-- **Bicicletas:** Cada bicicleta se retira de una estación y se devuelve en otra.
-- **Disponibilidad:** Se asume que siempre hay una bicicleta disponible en cada estación.
-- **Cálculo de Precio:** El precio del alquiler se calcula al devolver la bicicleta según reglas específicas, como costos fijos, costos por hora, costos por kilómetro, y descuentos en días promocionales.
-- **Moneda:** El cliente elige la moneda en la que desea ver el importe adeudado al devolver la bicicleta.
+- **Clients:** Only registered clients can rent bikes.
+- **Bikes:** Each bike is picked up from one station and returned to another.
+- **Availability:** It is assumed that there is always a bike available at each station.
+- **Price Calculation:** The rental price is calculated upon bike return based on specific rules, such as fixed costs, hourly costs, kilometer costs, and discounts on promotional days.
+- **Currency:** The client chooses the currency in which they want to see the amount owed when returning the bike.
 
-## Funcionalidades
+## Features
 
-### Estaciones
+### Stations
 
-1. **Consultar Estaciones:** Obtener el listado de todas las estaciones disponibles en la ciudad.
-2. **Estación más Cercana:** Consultar los datos de la estación más cercana a una ubicación proporcionada por el cliente.
-3. **Agregar Estación:** Agregar una nueva estación al sistema.
+1. **Get Stations:** Retrieve the list of all available stations in the city.
+2. **Nearest Station:** Retrieve data for the station nearest to a location provided by the client.
+3. **Add Station:** Add a new station to the system.
 
-### Alquileres
+### Rentals
 
-4. **Iniciar Alquiler:** Iniciar el alquiler de una bicicleta desde una estación específica.
-5. **Finalizar Alquiler:** Finalizar un alquiler en curso, proporcionando datos del mismo y el costo expresado en la moneda elegida por el cliente.
-6. **Consultar Alquileres:** Obtener un listado de los alquileres realizados aplicando, al menos, un filtro.
+4. **Start Rental:** Start renting a bike from a specific station.
+5. **Finish Rental:** Finish an ongoing rental, providing data for it and the cost expressed in the currency chosen by the client.
+6. **Get Rentals:** Retrieve a list of rentals made by applying at least one filter.
 
-## Roles y Autenticación
+## Roles and Authentication
 
-- **Administrador:** Puede agregar nuevas estaciones y obtener listados sobre los alquileres realizados.
-- **Cliente:** Puede realizar consultas sobre las estaciones, realizar alquileres y devoluciones.
+- **Administrator:** Can add new stations and obtain lists of rentals made.
+- **Client:** Can make inquiries about stations, rent bikes, and return bikes.
 
-## Desarrollo y Consideraciones
+## Service Organization
 
-- El backend presenta un único punto de entrada a través de un API Gateway.
-- Se proporciona una base de datos para su utilización.
-- Todas las llamadas a los endpoints requieren autenticación de clientes.
-- El uso correcto de códigos de respuesta HTTP es esencial.
-- Todos los endpoints deben estar documentados utilizando Swagger.
+![Service Organization](images/microservices.png)
+![Service Diagram](images/services.png)
 
-## Organización de los Servicios
+## Database
 
-![Organización de Servicios](images/microservices.png)
-![Diagrama de servicios](images/services.png)
+### Entity Diagram
 
-## Base de Datos
+![Entity Diagram](images/bbdd.png)
 
-### Diagrama de Entidades
+### Tables
 
-![Diagrama de Entidades](images/bbdd.png)
+1. **Stations:**
+   - `ID`: Station identifier
+   - `NAME`: Station name
+   - `CREATION_DATE_TIME`: Date and time of station creation
+   - `LATITUDE`: Latitude of station location
+   - `LONGITUDE`: Longitude of station location
 
-### Tablas
+2. **Rates:**
+   - `ID`: Rate identifier
+   - `RATE_TYPE`: Rate type (1 - Normal, 2 - Discount)
+   - `DEFINITION`: Rate definition ('S' - Day of the week, 'C' - Day, month, and year)
+   - `DAY_OF_WEEK`: Day of the week for weekly rate
+   - `DAY_OF_MONTH`: Day of the month for daily rate
+   - `MONTH`: Month for monthly rate
+   - `YEAR`: Year for annual rate
+   - `FIXED_RENT_AMOUNT`: Fixed amount for starting the rental
+   - `MINUTE_FRACTION_AMOUNT`: Amount per fractionated minute
+   - `HOUR_AMOUNT`: Amount per complete hour
+   - `KM_AMOUNT`: Amount per kilometer between stations
 
-1. **Estaciones:**
-    - `ID`: Identificador de la estación
-    - `NOMBRE`: Nombre de la estación
-    - `FECHA_HORA_CREACION`: Fecha y Hora de creación de la estación
-    - `LATITUD`: Latitud de la ubicación de la estación
-    - `LONGITUD`: Longitud de la ubicación de la estación
+3. **Rentals:**
+   - `ID`: Rental identifier
+   - `CLIENT_ID`: Client identifier who made the rental
+   - `STATUS`: Rental status (1 - Started, 2 - Finished)
+   - `PICKUP_STATION`: ID of the station where the bike was picked up
+   - `RETURN_STATION`: ID of the station where the bike was returned
+   - `PICKUP_DATE_TIME`: Date and time of bike pickup
+   - `RETURN_DATE_TIME`: Date and time of bike return
+   - `AMOUNT`: Amount charged for the rental
+   - `RATE_ID`: ID of the rate used to calculate the rental amount
 
-2. **Tarifas:**
-    - `ID`: Identificador de la tarifa
-    - `TIPO_TARIFA`: Tipo de tarifa (1 - Normal, 2 - Descuento)
-    - `DEFINICIÓN`: Definición de la tarifa (‘S’ - Día de la semana, ‘C’ - Día, mes y año)
-    - `DIA_SEMANA`: Día de la semana para la tarifa semanal
-    - `DIA_MES`: Día del mes para la tarifa diaria
-    - `MES`: Mes para la tarifa mensual
-    - `ANIO`: Año para la tarifa anual
-    - `MONTO_FIJO_ALQUILER`: Monto fijo por iniciar el alquiler
-    - `MONTO_MINUTO_FRACCION`: Monto por minuto fraccionado
-    - `MONTO_HORA`: Monto por hora completa
-    - `MONTO_KM`: Monto por kilómetro entre estaciones
+## Distance Between Stations
 
-3. **Alquileres:**
-    - `ID`: Identificador del alquiler
-    - `ID_CLIENTE`: Identificador del cliente que realizó el alquiler
-    - `ESTADO`: Estado del alquiler (1 - Iniciado, 2 - Finalizado)
-    - `ESTACION_RETIRO`: ID de la estación donde se retiró la bicicleta
-    - `ESTACION_DEVOLUCION`: ID de la estación donde se devolvió la bicicleta
-    - `FECHA_HORA_RETIRO`: Fecha y Hora del retiro de la bicicleta
-    - `FECHA_HORA_DEVOLUCION`: Fecha y Hora de la devolución de la bicicleta
-    - `MONTO`: Monto cobrado por el alquiler
-    - `ID_TARIFA`: ID de la tarifa utilizada para calcular el monto del alquiler
+The distance between two stations is simply calculated using the Euclidean distance between the two points, where each degree corresponds to 110000 meters.
 
-## Distancia entre Estaciones
-
-La distancia entre dos estaciones se calcula simplemente usando la distancia euclídea entre ambos puntos, donde cada grado corresponde a 110000 metros.
-
-
-## Colaboradores
+## Contributors
 
 - Matías Ezequiel Gil
 - Alejandro Axel Molina
