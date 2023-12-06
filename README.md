@@ -44,36 +44,36 @@ The bike rental system operates under certain assumptions and rules, including:
 
 ### Tables
 
-1. **Stations:**
+1. **Estaciones (Stations):**
    - `ID`: Station identifier
-   - `NAME`: Station name
-   - `CREATION_DATE_TIME`: Date and time of station creation
-   - `LATITUDE`: Latitude of station location
-   - `LONGITUDE`: Longitude of station location
+   - `NOMBRE`: Station name
+   - `FECHA_HORA_CREACION`: Date and time of station creation
+   - `LATITUD`: Latitude of station location
+   - `LONGITUD`: Longitude of station location
 
-2. **Rates:**
+2. **Tarifas (Rates):**
    - `ID`: Rate identifier
-   - `RATE_TYPE`: Rate type (1 - Normal, 2 - Discount)
-   - `DEFINITION`: Rate definition ('S' - Day of the week, 'C' - Day, month, and year)
-   - `DAY_OF_WEEK`: Day of the week for weekly rate
-   - `DAY_OF_MONTH`: Day of the month for daily rate
-   - `MONTH`: Month for monthly rate
-   - `YEAR`: Year for annual rate
-   - `FIXED_RENT_AMOUNT`: Fixed amount for starting the rental
-   - `MINUTE_FRACTION_AMOUNT`: Amount per fractionated minute
-   - `HOUR_AMOUNT`: Amount per complete hour
-   - `KM_AMOUNT`: Amount per kilometer between stations
+   - `TIPO_TARIFA`: Rate type (1 - Normal, 2 - Discount)
+   - `DEFINICIÓN`: Rate definition ('S' - Day of the week, 'C' - Day, month, and year)
+   - `DIA_SEMANA`: Day of the week for weekly rate
+   - `DIA_MES`: Day of the month for daily rate
+   - `MES`: Month for monthly rate
+   - `ANIO`: Year for annual rate
+   - `MONTO_FIJO_ALQUILER`: Fixed amount for starting the rental
+   - `MONTO_MINUTO_FRACCION`: Amount per fractionated minute
+   - `MONTO_HORA`: Amount per complete hour
+   - `MONTO_KM`: Amount per kilometer between stations
 
-3. **Rentals:**
+3. **Alquileres (Rentals):**
    - `ID`: Rental identifier
-   - `CLIENT_ID`: Client identifier who made the rental
-   - `STATUS`: Rental status (1 - Started, 2 - Finished)
-   - `PICKUP_STATION`: ID of the station where the bike was picked up
-   - `RETURN_STATION`: ID of the station where the bike was returned
-   - `PICKUP_DATE_TIME`: Date and time of bike pickup
-   - `RETURN_DATE_TIME`: Date and time of bike return
-   - `AMOUNT`: Amount charged for the rental
-   - `RATE_ID`: ID of the rate used to calculate the rental amount
+   - `ID_CLIENTE`: Client identifier who made the rental
+   - `ESTADO`: Rental status (1 - Started, 2 - Finished)
+   - `ESTACION_RETIRO`: ID of the station where the bike was picked up
+   - `ESTACION_DEVOLUCION`: ID of the station where the bike was returned
+   - `FECHA_HORA_RETIRO`: Date and time of bike pickup
+   - `FECHA_HORA_DEVOLUCION`: Date and time of bike return
+   - `MONTO`: Amount charged for the rental
+   - `ID_TARIFA`: ID of the rate used to calculate the rental amount
 
 ## Distance Between Stations
 
