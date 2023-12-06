@@ -11,9 +11,11 @@ public class CrearEstacionRequest {
     @NotBlank(message = "Nombre es requerido")
     @NotNull(message = "Nombre es requerido")
     String nombre;
+
     @NotBlank(message = "Latitud es requerida")
     @NotNull(message = "Latitud es requerida")
     Double latitud;
+
     @NotBlank(message = "Longitud es requerida")
     @NotNull(message = "Longitud es requerida")
     Double longitud;

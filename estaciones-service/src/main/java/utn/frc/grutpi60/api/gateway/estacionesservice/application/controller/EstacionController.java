@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import utn.frc.grutpi60.api.gateway.estacionesservice.application.request.CrearEstacionRequest;
 import utn.frc.grutpi60.api.gateway.estacionesservice.application.response.EstacionResponse;
 import utn.frc.grutpi60.api.gateway.estacionesservice.service.EstacionService;
-import utn.frc.grutpi60.api.gateway.estacionesservice.application.ResponseHandler;
 import lombok.val;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,49 +19,48 @@ import lombok.val;
 public class EstacionController {
     EstacionService estacionService;
 
-    // ROL: CLIENTE/ADMINISTRADOR
     @GetMapping
-    public ResponseEntity<Object> getAll() {
+    public ResponseEntity<List<EstacionResponse>> getAll() {
         try {
             val estaciones = estacionService.findAll()
                     .stream()
                     .map(EstacionResponse::from)
                     .toList();
-            return ResponseHandler.success(estaciones);
+            return ResponseEntity.ok(estaciones);
         } catch (Exception e) {
-            return ResponseHandler.internalError();
+            return ResponseEntity.status(500).build();
         }
     }
 
-
-    // ROL: ADMINISTRADOR
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody CrearEstacionRequest aRequest) {
+    public ResponseEntity<EstacionResponse> create(@RequestBody CrearEstacionRequest aRequest) {
         try {
             val estacion = estacionService.create(aRequest.getNombre(), aRequest.getLatitud(), aRequest.getLongitud());
-            return ResponseHandler.success(EstacionResponse.from(estacion));
+            return ResponseEntity.ok(EstacionResponse.from(estacion));
         } catch (IllegalArgumentException e) {
-            return ResponseHandler.badRequest(e.getMessage());
+            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
-            return ResponseHandler.internalError();
+            return ResponseEntity.status(500).build();
         }
     }
 
-    // ROL: CLIENTE/ADMINISTRADOR
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getById(@PathVariable Integer id) {
+    public ResponseEntity<EstacionResponse> getById(@PathVariable Integer id) {
         try {
-            return estacionService.findById(id)
-                    .map(aCustomer -> ResponseHandler.success(EstacionResponse.from(aCustomer)))
-                    .orElseGet(ResponseHandler::notFound);
+            val estacion = estacionService.findById(id);
+            if (estacion.isPresent()) {
+                return ResponseEntity.ok(EstacionResponse.from(estacion.get()));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } catch (Exception e) {
-            return ResponseHandler.internalError();
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
         }
     }
 
-    // ROL: CLIENTE/ADMINISTRADOR
     @GetMapping("/cercana")
-    public ResponseEntity<Object> getEstacionesCercanas(
+    public ResponseEntity<EstacionResponse> getEstacionesCercanas(
             @RequestParam Double latitud,
             @RequestParam Double longitud) {
 
@@ -68,28 +68,28 @@ public class EstacionController {
             val estacionMasCercana = estacionService.encontrarEstacionMasCercana(latitud, longitud);
             if (estacionMasCercana != null) {
                 EstacionResponse estacionResponse = EstacionResponse.from(estacionMasCercana);
-                return ResponseHandler.success(estacionResponse);
+                return ResponseEntity.ok(estacionResponse);
             } else {
-                return ResponseHandler.notFound();
+                return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
-            System.err.println("Error while getting estaciones cercanas: " + e.getMessage());
-            e.printStackTrace(System.err);
-            return ResponseHandler.internalError();
+            return ResponseEntity.status(500).build();
         }
     }
 
     @GetMapping("/distancia-entre-estaciones")
-    public ResponseEntity<Object> getDistanciaEntreEstaciones(
+    public ResponseEntity<Double> getDistanciaEntreEstaciones(
             @RequestParam Integer idEstacionOrigen,
             @RequestParam Integer idEstacionDestino) {
 
         try {
-            val distancia = (Double) estacionService
+            Double distancia = (Double) estacionService
                     .calcularDistanciaEntreEstaciones(idEstacionOrigen, idEstacionDestino) * 110000;
-            return ResponseHandler.success(distancia);
+            return ResponseEntity.ok(distancia);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
-            return ResponseHandler.internalError();
+            return ResponseEntity.status(500).build();
         }
     }
 }

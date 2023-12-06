@@ -7,18 +7,24 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="estaciones-service" />
+        <module name="alquileres-service" />
         <module name="api.gateway" />
         <module name="TPI" />
-        <module name="servicealquileres" />
-        <module name="api.gateway.estaciones-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="api.gateway.estaciones-service" target="17" />
+      <module name="servicealquileres" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="TPI" options="-parameters" />
+      <module name="alquileres-service" options="-parameters" />
       <module name="api.gateway" options="-parameters" />
       <module name="api.gateway.estaciones-service" options="-parameters" />
+      <module name="estaciones-service" options="-parameters" />
       <module name="servicealquileres" options="-parameters" />
     </option>
   </component>

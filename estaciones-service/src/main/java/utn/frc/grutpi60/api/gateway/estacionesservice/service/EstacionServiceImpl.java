@@ -64,8 +64,10 @@ public class EstacionServiceImpl implements EstacionService {
 
     @Override
     public Double calcularDistanciaEntreEstaciones(Integer idEstacionOrigen, Integer idEstacionDestino) {
-        Estacion estacionOrigen = estacionRepository.findById(Long.valueOf(idEstacionOrigen)).get();
-        Estacion estacionDestino = estacionRepository.findById(Long.valueOf(idEstacionDestino)).get();
+        Estacion estacionOrigen = estacionRepository.findById(Long.valueOf(idEstacionOrigen))
+                .orElseThrow(() -> new IllegalArgumentException("Estacion origen no encontrada"));
+        Estacion estacionDestino = estacionRepository.findById(Long.valueOf(idEstacionDestino))
+                .orElseThrow(() -> new IllegalArgumentException("Estacion destino no encontrada"));
 
         double distancia = calcularDistancia(
                 estacionOrigen.getCoordenada().getLatitud(), estacionOrigen.getCoordenada().getLongitud(),

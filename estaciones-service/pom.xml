@@ -6,10 +6,10 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.1.5</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>utn.frc.grutpi60</groupId>
-	<artifactId>api.gateway.estaciones-service</artifactId>
+	<artifactId>estaciones-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>api.gateway.estaciones-service</name>
 	<description>Estaciones Service para TPI Grupo 60 Backend de Aplicaciones 2023</description>
